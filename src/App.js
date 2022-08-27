@@ -1,25 +1,52 @@
 import logo from './logo.svg';
 import './App.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function App() {
-  const nayoks = ['sakib', "milon", "reakib", "mushi"]
+  const [nayoks, setNayoks]= useState([])
+  useEffect(() => {
+    fetch('https://jsonplaceholder.typicode.com/users')
+    .then(res => res.json())
+    .then(data => setNayoks(data))
+  }, [])
+  const frineds = [{name: 'rahim', idNo: 101}, {name: 'karim', idNo: 102}, {name: 'nayem', idNo: 103}, {name: 'monir', idNo: 104}]
+  //const nayoks = [{name: 'sakib', age: 50}, {name: 'nayem', age: 20}, {name: 'mistkat', age: 30}, {name: 'mohim', age: 25}]
   return (
     <div className="App">
+      <SongName></SongName>
+      {
+        frineds.map(friend => <FrinedsName name= {friend.name} key ={friend.name} idNo= {friend.idNo}></FrinedsName>)
+      }
       <MovieCounter></MovieCounter>
-        <Nayok name= {nayoks[0]} age ="50"></Nayok>
+      {
+        nayoks.map(nayok => <Nayok name = {nayok.name} key= {nayok.id} age = {nayok.age}></Nayok>)
+      }
+        {/* <Nayok name= {nayoks[0]} age ="50"></Nayok>
         <Nayok name= {nayoks[1]}></Nayok>
-        <Nayok name= {nayoks[2]}></Nayok>
-      <header className="App-header">
-        {/* <img src={logo} className="App-logo" alt="logo" /> */}
-        
-        <ul>
-        {nayoks.map(nayok => <li>{nayok}</li>)}
-        </ul>
-        
-      </header>
+        <Nayok name= {nayoks[2]}></Nayok> */}
+     
     </div>
   );
+}
+
+function SongName () {
+  const [count, setCount] = useState(0)
+  const clickhandler = () => {
+    setCount(count + 1)
+  }
+  return (
+    <div>
+      <h2>Song Number: {count}</h2>
+      <button onClick = {clickhandler}>Next Song</button>
+    </div>
+  )
+}
+function FrinedsName (props) {
+  return (
+    <div>
+      <h1>name: {props.name} {props.idNo}</h1>
+    </div>
+  )
 }
 
 function MovieCounter() {
@@ -31,13 +58,15 @@ function MovieCounter() {
     <div>
       <button onClick ={clickhandler}>add movie</button>
       <h3>Number of counter: {counter}</h3>
-      <MovieDisplay>{counter}</MovieDisplay>
+      <MovieDisplay count ={counter}> </MovieDisplay>
+      <MovieDisplay count ={counter + 10}> </MovieDisplay>
+      <MovieDisplay count ={counter + 5}> </MovieDisplay>
     </div>
   )
 }
 
-function MovieDisplay () {
-  return <h3>moive attech :</h3>
+function MovieDisplay (props) {
+  return <h3>Movies i have acted : {props.count}</h3>
 }
 
 function Nayok (props) {
@@ -51,7 +80,7 @@ function Nayok (props) {
 
   return (
     <div style = {nayokStyle}>
-      <h3>{props.name}</h3>
+      <h3> ami nayok {props.name}</h3>
       <h3>age: {props.age}</h3>
     </div>
   )
